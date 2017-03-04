@@ -6,18 +6,17 @@ def createMap(ip,protocol):
     heatspots = heatspots + "], {radius: 25}, {0.2: 'blue', 0.4: 'lime', 0.6: 'red'})"
     file = open('osm.html', 'w')
     file.write('''<!DOCTYPE html>
+        <html ng-app="mapper" ng-controller="MapperController as Mapper">
         <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+        <script src="app.js"></script>
         
         <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css">
         <script src="https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
@@ -35,28 +34,11 @@ def createMap(ip,protocol):
         
         
         
-        <style>
-        
-        html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        }
-        
-        #map {
-        position:absolute;
-        top:0;
-        bottom:0;
-        right:0;
-        left:0;
-        }
-        
-        </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
         </head>
         
         <body>
-        
+        <div class="containerCard"><p class="standardFont">Should probably think of something to put in here :)</p></div>
         <div class="folium-map" id="folium_b18b2b2798f2418ba465ac3f4f8c0f67" style="width: 100%; height: 100%"></div>
         
         <script>
@@ -90,7 +72,7 @@ def createMap(ip,protocol):
         Creates the map and adds the selected layers
         */
         var map = L.map('folium_b18b2b2798f2418ba465ac3f4f8c0f67', {
-        center:[55, -2],
+        center:[51, -1],
         zoom: 7,
         maxBounds: bounds,
         layers: [base_tile]
