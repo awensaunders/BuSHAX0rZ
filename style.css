@@ -32,3 +32,25 @@
     p,h1,h2,h3,h4,h5{
 		font-family: "Segoe UI WestEuropean,Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif";
     }
+    .timeLabelLeft{
+        float: left;
+        margin-right: 20px;
+        font-family: "Segoe UI WestEuropean,Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif";
+    }
+    .timeLabelRight{
+        float: right;
+        font-family: "Segoe UI WestEuropean,Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif";
+    }
+    .dateStuff{
+        width: 20%;
+        display: inline-block;
+    }
+    .arrow{
+        display: inline-block;
+    }
+    .leet{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        color: white;
+    }
