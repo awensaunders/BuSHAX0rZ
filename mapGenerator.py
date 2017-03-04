@@ -1,6 +1,6 @@
 import heatMap
 collisions = []
-with open('../test/accidents.csv','r') as f:
+with open('../out.csv','r') as f:
         while True:
             line = f.readline()
             if not line: break
