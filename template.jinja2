@@ -45,13 +45,16 @@
         //section for adding clustered markers
         {{ clickSpots }}
         //add the clustered markers to the group anyway
+        var stops = L.layerGroup();
+        {{ busStops }}
         var baseLayer = {
         "Base Layer": base_tile
         };
         {{ heatspots }}
         var layer_list = {
             "Heat Map" : heat,
-            "Individual accidents" : clusteredmarkers
+            "Individual accidents" : clusteredmarkers,
+            "Bus Stops" : stops
         };
 
         /*
