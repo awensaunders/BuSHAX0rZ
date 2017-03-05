@@ -10,7 +10,7 @@ function convertCSVtoJSON(csv){
 app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookies){
 	//chuck all the requests in here, probably put them in some functions
 
-	this.createMap = function(points){
+	this.createMap = function(collision_points, bus_stops){
 		var base_tile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 15,
         minZoom: 7,
@@ -20,17 +20,32 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
         "Base Layer": base_tile
         };
         var clusteredmarkers = L.markerClusterGroup();
+        var busStops = L.layerGroup();
         markers = [];
-		for (var i = 0; i < points.length; i++) {
-			if(parseFloat(points[i][0]) && parseFloat(points[i][1])){
-				markers[i] = L.circle([parseFloat(points[i][0]),  parseFloat(points[i][1])], 25, {color: 'black',fillColor: '#66ff33',fillOpacity: 2.0});
-				markers[i].bindPopup("<p>" + points[i][0] + ", " + points[i][1] + "</p>");
+        heatPoints = [];
+        bus_stop_markers = [];
+		for (var i = 0; i < collision_points.length; i++) {
+			var lat = parseFloat(collision_points[i][0]);
+			var lng = parseFloat(collision_points[i][1]);
+			if((lat) && (lng)){
+				markers[i] = L.circle([lat,  lng], 25, {color: 'black',fillColor: '#66ff33',fillOpacity: 2.0});
+				markers[i].bindPopup("<p>" + collision_points[i][0] + ", " + collision_points[i][1] + "</p>");
 				markers[i]._popup.options.maxWidth = 300;
 				clusteredmarkers.addLayer(markers[i]);
+				heatPoints.push([lat,lng,1]);
 			}
 		}
+		for (var i = 0; i < bus_stops.length; i++) {
+			bus_stop_markers[i] = L.circle([bus_stops[i]["latitude"],bus_stops[i]["longitude"]],25,{color:'blue',fillColor:'#4286f4',fillOpacity:2.0});
+			bus_stop_markers[i].bindPopup("<p>" + bus_stops[i]["description"] + "</p>");
+			bus_stop_markers[i]._popup.options.maxWidth = 300;
+			busStops.addLayer(bus_stop_markers[i]);
+		}
+		var heat = L.heatLayer(heatPoints, {radius: 25}, {0.2: 'blue', 0.4: 'lime', 0.6: 'red'});
 		var layer_list = {
-            "Individual accidents" : clusteredmarkers
+            "Individual accidents" : clusteredmarkers,
+            "Bus Stops" : busStops,
+            "Heat Map" : heat
         };
 
         /*
@@ -56,23 +71,27 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 	this.applyFilters = function(){
 		var rangeSlider = angular.element(document.getElementById('timeRange'));
 		var values = rangeSlider.val().split(",");
-		console.log(values)
-		for (var i = 0; i < values.length; i++) {
-			console.log(values[i]);
-		}
+
 		var csvString = "";
-		$http.get("../out.csv").then(function(response){
-			csvString = response.data;
-		});
+		$http.get("out.csv").then(function(response){
+		csvString = response.data;
 		var points = convertCSVtoJSON(csvString);
-		this.createMap(points);
+		var busStops;
+		$http.get("stops.json").then(function(response){
+			busStops = response.data;
+		});
+		Mapper.createMap(points, busStops);
+		});
 	};
 	var Mapper = this;
 	var csvString = "";
 	$http.get("out.csv").then(function(response){
-			csvString = response.data;
-			var points = convertCSVtoJSON(csvString);
-			console.log(points);
-			Mapper.createMap(points);
+		csvString = response.data;
+		var points = convertCSVtoJSON(csvString);
+		var busStops;
+		$http.get("stops.json").then(function(response){
+			busStops = response.data;
+			Mapper.createMap(points, busStops);
+		});
 	});
 });
