@@ -21,7 +21,7 @@
         <link rel="stylesheet" type="text/css" href="multirange.css">
         <link rel="stylesheet" type="text/css" href="style.css">
         </head>
-        <body>
+        <body id='containerForLeaflet'>
         <div class="containerCard">
         <form>
             <h1>BuSHAX0rZ</h1>
@@ -35,6 +35,7 @@
             <input class="dateStuff" type="date" ng-model="startDate"/> <p class="arrow">--></p> <input class="dateStuff" type="date" ng-model="endDate"/>
             <button ng-click="Mapper.applyFilters()">Apply</button>
         </form>
+        <p ng-bind="weather_events_p"></p>
         <p class='leet'>1337 ;)</p>
         </div>
         <div class="folium-map" id="folium_b18b2b2798f2418ba465ac3f4f8c0f67"></div>
