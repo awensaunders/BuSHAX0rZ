@@ -73,14 +73,17 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 		var values = rangeSlider.val().split(",");
 
 		var csvString = "";
+		//http://rtl2.ods-live.co.uk//api/vehiclePositions?key=8NhFg4aAy6
+		var bus_locations = getBusLocations();
+		};
 		$http.get("out.csv").then(function(response){
-		csvString = response.data;
-		var points = convertCSVtoJSON(csvString);
-		var busStops;
-		$http.get("stops.json").then(function(response){
-			busStops = response.data;
-		});
-		Mapper.createMap(points, busStops);
+			csvString = response.data;
+			var points = convertCSVtoJSON(csvString);
+			var busStops;
+			$http.get("stops.json").then(function(response){
+				busStops = response.data;
+			});
+			Mapper.createMap(points, busStops);
 		});
 	};
 	var Mapper = this;
@@ -94,4 +97,14 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 			Mapper.createMap(points, busStops);
 		});
 	});
+	this.filterTest = function(start_date, end_date, start_time, end_time, date, time){
+		return (start_date <= date && date <= end_date && start_time <= time && time <= end_time);
+	}
+	this.getBusLocations = function(){
+		var bus_locations = []
+		$http.get("http://rtl2.ods-live.co.uk//api/vehiclePositions?key=8NhFg4aAy6").then(function(response){
+				bus_locations = response.data;
+		};
+		return bus_locations;
+	}
 });
