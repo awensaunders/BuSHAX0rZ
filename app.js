@@ -8,7 +8,7 @@ function convertCSVtoJSON(csv){
 	return data;
 }
 function filter(start_date, end_date,date, start_time, end_time, time){
-	return ((start_date.getTime() <= date.getTime()) && (date.getTime() <= end_date.getTime()) && (start_time <= time) && (time <= end_time));
+	return ((start_date.getTime() <= date.getTime()) && (date.getTime() <= end_date.getTime()) && (start_time.isBefore(time)) && (time.isBefore(end_time)));
 }
 function toDateTime(current_date,secs) {
     var t = current_date; // Epoch
@@ -111,34 +111,12 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 				$http.get("WeatherData.json").then(function(response){
 					var pointsToPass = []
 					weather_data = response.data;
-					for (var i = 0; i < points.length; i++) {
-						var currentDate = points[i][2].split("/");
-						if(currentDate[1] < 12){
-							var dateToPass = new Date(currentDate[2], currentDate[1],currentDate[0]);
-						}else{
-							if(currentDate[0] < 12){
-								var dateToPass = new Date(parseInt(currentDate[2]), parseInt(currentDate[0]), parseInt(currentDate[1]));
-							}
-						}
-						for (var x = 0; x < weather_data.length; x++) {
-							if(dateToPass.getTime() == (new Date(weather_data[x]["timestamp"])).getTime()){
-								points[i].push(weather_data[x]["precipitation"]);
-								points[i].push(weather_data[x]["wind2"]);
-							}
-							if((startTime == 864) && (endTime == 86400)){
-								startTime = (new Date(weather_data[x]["timestamp"])).getTime();
-								endTime = (new Date(weather_data[x]["timestamp"])).getTime();
-
-							}
-							else{
-								startTime = toDateTime(dateToPass,startTime);
-								endTime = toDateTime(dateToPass,endTime);
-							}
-							if(filter($scope.startDate, $scope.endDate, dateToPass, startTime,endTime, (new Date(weather_data[x]["timestamp"])).getTime())){
-								pointsToPass.push(points[i]);
-							}
-						}
-					}
+					this.combinedSet.forEach(function (item, key, mapObj) {
+   						if(((new Date(key)).getTime() <= $scope.endDate) && ($scope.startDate <= (new Date(key)).getTime())){
+   							var pointArr = combinedSet.get(key);
+   							pointsToPass.push(pointArr);
+   						}
+					});
 					var mapContainer = angular.element(document.getElementById('folium_b18b2b2798f2418ba465ac3f4f8c0f67'));
 					mapContainer.remove();
 					var element = angular.element(document.getElementById('containerForLeaflet'));
@@ -154,6 +132,7 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 	$http.get("out.csv").then(function(response){
 		csvString = response.data;
 		var points = convertCSVtoJSON(csvString);
+		this.combinedSet = new Map();
 		var busStops;
 		var weather_data;
 		$http.get("stops.json").then(function(response){
@@ -173,6 +152,7 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 						if(dateToPass.getTime() == (new Date(weather_data[x]["timestamp"])).getTime()){
 							points[i].push(weather_data[x]["precipitation"]);
 							points[i].push(weather_data[x]["wind2"]);
+							this.combinedSet.set(weather_data[x]["timestamp"],points[i]);
 						}
 					}
 				}
