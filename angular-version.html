@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+        <html ng-app="Mapper" ng-controller="MapperController as Mapper">
+        <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+        <script src="app.js"></script>
+        <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css">
+        <script src="https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+        <script src="leaflet-heat.js"></script>
+        <script type="text/javascript" src="multirange.js"></script>
+        <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
+        <link rel="stylesheet" type="text/css" href="multirange.css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        </head>
+        <body>
+        <div class="containerCard">
+        <form>
+            <h1>BuSHAX0rZ</h1>
+            <br>
+            <label class='timeLabelLeft'>00:00</label>
+            <label class='timeLabelRight'>23:59</label>
+            <input type="range" multiple value="0,100" id="timeRange"/>
+            <br>
+            <br>
+            <label>Date Range:</label>
+            <input class="dateStuff" type="date" ng-model="startDate"/> <p class="arrow">--></p> <input class="dateStuff" type="date" ng-model="endDate"/>
+            <button ng-click="Mapper.applyFilters()">Apply</button>
+        </form>
+        <p class='leet'>1337 ;)</p>
+        </div>
+        <div class="folium-map" id="folium_b18b2b2798f2418ba465ac3f4f8c0f67"></div>
+        </body>
+    </html>
