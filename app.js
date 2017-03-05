@@ -17,7 +17,6 @@ function toDateTime(current_date,secs) {
 }
 app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookies){
 	//chuck all the requests in here, probably put them in some functions
-
 	this.createMap = function(collision_points, bus_stops){
 		var weather_events = 0;
 		var base_tile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -45,8 +44,7 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 				else if((parseFloat(collision_points[i][28]) > 0.004) || (parseFloat(collision_points[i][29]) > 6)){
 					weather_events += 1;
 				}
-				markers[i].bindPopup("<p>" + collision_points[i][0] + ", " + collision_points[i][1] + "</p><p> Date(M/D/Y) :" + collision_points[i][2] + "</p><p>Precipitation: " + collision_points[i][28] + "</p><p>Wind: " + collision_points[i][29] + "</p>");
-				markers[i]._popup.options.maxWidth = 300;
+				markers[i].bindPopup("<p>" + collision_points[i][0] + ", " + collision_points[i][1] + "</p><p> Date(M/D/Y) :" + collision_points[i][2] + "</p><p>Precipitation: " + collision_points[i][28] + "</p><p>Wind: " + collision_points[i][29] + "</p><p> Claim value: " + collision_points[i][26] + "</p><p>Incident Type: " + collision_points[i][18] + "</p>");
 				clusteredmarkers.addLayer(markers[i]);
 				heatPoints.push([lat,lng,1]);
 			}
@@ -93,12 +91,6 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 		return bus_locations;
 	};
 	this.applyFilters = function(){
-		var rangeSlider = angular.element(document.getElementById('timeRange'));
-		var values = rangeSlider.val().split(",");
-		console.log(values[0]);
-		console.log(values[1]);
-		var startTime = 86400 / parseInt(100 - values[0]);
-		var endTime = 86400 / parseInt(100 - values[1] + 1);
 		var csvString = "";
 		//http://rtl2.ods-live.co.uk//api/vehiclePositions?key=8NhFg4aAy6
 		var bus_locations = this.getBusLocations();

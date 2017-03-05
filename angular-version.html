@@ -26,12 +26,6 @@
         <div class="containerCard">
         <form>
             <h1>BuSHAX0rZ</h1>
-            <br>
-            <label class='timeLabelLeft'>00:00</label>
-            <label class='timeLabelRight'>23:59</label>
-            <input type="range" multiple value="0,100" id="timeRange"/>
-            <br>
-            <br>
             <label>Date Range:</label>
             <input class="dateStuff" type="date" ng-model="startDate"/> <p class="arrow">--></p> <input class="dateStuff" type="date" ng-model="endDate"/>
             <button ng-click="Mapper.applyFilters()">Apply</button>
@@ -41,7 +35,7 @@
         <p ng-bind="weather_events_p"></p>
         <h2>Key</h2>
         <div class='key_bus_stop'></div><label>Bus stop</label>
-        <div class='key_bus_collision'></div><label>Collision</label>
+        <div class='key_bus_collision'></div><label>Incident</label>
         <p class='leet'>1337 ;)</p>
         </div>
         <div class="folium-map" id="folium_b18b2b2798f2418ba465ac3f4f8c0f67"></div>
