@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
         <link rel="stylesheet" type="text/css" href="multirange.css">
         <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="https://cdn.jsdelivr.net/momentjs/2.13.0/moment.min.js"></script>
         </head>
         <body id='containerForLeaflet'>
         <div class="containerCard">
@@ -34,8 +35,13 @@
             <label>Date Range:</label>
             <input class="dateStuff" type="date" ng-model="startDate"/> <p class="arrow">--></p> <input class="dateStuff" type="date" ng-model="endDate"/>
             <button ng-click="Mapper.applyFilters()">Apply</button>
+            <br>
+            <button ng-click="Mapper.reset()">Reset Filters</button>
         </form>
         <p ng-bind="weather_events_p"></p>
+        <h2>Key</h2>
+        <div class='key_bus_stop'></div><label>Bus stop</label>
+        <div class='key_bus_collision'></div><label>Collision</label>
         <p class='leet'>1337 ;)</p>
         </div>
         <div class="folium-map" id="folium_b18b2b2798f2418ba465ac3f4f8c0f67"></div>

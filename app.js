@@ -42,10 +42,10 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 					collision_points[i].push("No Data Found");
 					collision_points[i].push("No Data Found");
 				}
-				else if((parseFloat(collision_points[i][3]) > 0.004) || (parseFloat(collision_points[i][4]) > 6)){
+				else if((parseFloat(collision_points[i][28]) > 0.004) || (parseFloat(collision_points[i][29]) > 6)){
 					weather_events += 1;
 				}
-				markers[i].bindPopup("<p>" + collision_points[i][0] + ", " + collision_points[i][1] + "</p><p> Date(M/D/Y) :" + collision_points[i][2] + "</p><p>Precipitation: " + collision_points[i][3] + "</p><p>Wind: " + collision_points[i][4] + "</p>");
+				markers[i].bindPopup("<p>" + collision_points[i][0] + ", " + collision_points[i][1] + "</p><p> Date(M/D/Y) :" + collision_points[i][2] + "</p><p>Precipitation: " + collision_points[i][28] + "</p><p>Wind: " + collision_points[i][29] + "</p>");
 				markers[i]._popup.options.maxWidth = 300;
 				clusteredmarkers.addLayer(markers[i]);
 				heatPoints.push([lat,lng,1]);
@@ -102,30 +102,24 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 		var csvString = "";
 		//http://rtl2.ods-live.co.uk//api/vehiclePositions?key=8NhFg4aAy6
 		var bus_locations = this.getBusLocations();
-		$http.get("out.csv").then(function(response){
-			csvString = response.data;
-			var points = convertCSVtoJSON(csvString);
-			var busStops;
-			$http.get("stops.json").then(function(response){
+		this.reset();
+	};
+	this.reset = function(){
+		$http.get("stops.json").then(function(response){
 				busStops = response.data;
-				$http.get("WeatherData.json").then(function(response){
-					var pointsToPass = []
-					weather_data = response.data;
-					this.combinedSet.forEach(function (item, key, mapObj) {
-   						if(((new Date(key)).getTime() <= $scope.endDate) && ($scope.startDate <= (new Date(key)).getTime())){
-   							var pointArr = combinedSet.get(key);
-   							pointsToPass.push(pointArr);
-   						}
-					});
-					var mapContainer = angular.element(document.getElementById('folium_b18b2b2798f2418ba465ac3f4f8c0f67'));
-					mapContainer.remove();
-					var element = angular.element(document.getElementById('containerForLeaflet'));
-					var foliumDiv = "<div class='folium-map' id='folium_b18b2b2798f2418ba465ac3f4f8c0f67'></div>";
-					element.append($compile(foliumDiv)($scope));
-					Mapper.createMap(pointsToPass, busStops);
+				var pointsToPass = []
+				weather_data = response.data;
+				this.combinedSet.forEach(function (item, key, mapObj) {
+  					var pointArr = combinedSet.get(key);
+  					pointsToPass.push(pointArr);
 				});
+				var mapContainer = angular.element(document.getElementById('folium_b18b2b2798f2418ba465ac3f4f8c0f67'));
+				mapContainer.remove();
+				var element = angular.element(document.getElementById('containerForLeaflet'));
+				var foliumDiv = "<div class='folium-map' id='folium_b18b2b2798f2418ba465ac3f4f8c0f67'></div>";
+				element.append($compile(foliumDiv)($scope));
+				Mapper.createMap(pointsToPass, busStops);
 			});
-		});
 	};
     var Mapper = this;
     var csvString = "";
@@ -140,14 +134,7 @@ app.controller('MapperController',function($q,$sce,$compile,$scope,$http,$cookie
 			$http.get("WeatherData.json").then(function(response){
 				weather_data = response.data;
 				for (var i = 0; i < points.length; i++) {
-					var currentDate = points[i][2].split("/");
-					if(currentDate[1] < 12){
-						var dateToPass = new Date(parseInt(currentDate[2]), parseInt(currentDate[1]),parseInt(currentDate[0]));
-					}else{
-						if(currentDate[0] < 12){
-							var dateToPass = new Date(parseInt(currentDate[2]), parseInt(currentDate[0]), parseInt(currentDate[1]));
-						}
-					}
+					var dateToPass = new Date(points[i][2]);
 					for (var x = 0; x < weather_data.length; x++) {
 						if(dateToPass.getTime() == (new Date(weather_data[x]["timestamp"])).getTime()){
 							points[i].push(weather_data[x]["precipitation"]);
